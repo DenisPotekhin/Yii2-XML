@@ -18,25 +18,25 @@ class ProductsController extends Controller
 
     public function actionIndex()
     {
-        //парсинг
-        $xml_string = "../categories.xml";
-        $xml = simplexml_load_file($xml_string);
-        $json = json_encode($xml);
-        $array_categories = json_decode($json,TRUE);
+        //парсинг двух XML файлов в 2 массива
+        $xmlURLCategories = "../categories.xml";
+        $xmlCategories = simplexml_load_file($xmlURLCategories);
+        $jsonCategories = json_encode($xmlCategories);
+        $arrayCategories = json_decode($jsonCategories,TRUE);
 
-        $xml_string_products = "../products.xml";
-        $xml_products = simplexml_load_file($xml_string_products);
-        $json_products = json_encode($xml_products);
-        $array_products = json_decode($json_products,TRUE);
+        $xmlURLProducts = "../products.xml";
+        $xmlProducts = simplexml_load_file($xmlURLProducts);
+        $jsonProducts = json_encode($xmlProducts);
+        $arrayProducts = json_decode($jsonProducts,TRUE);
 
      //соединение 2 массива в один массив products
 
-        $categories=$array_categories['item'];
-        $products=$array_products['item'];
+        $categories=$arrayCategories['item'];
+        $products=$arrayProducts['item'];
 
-        for ($i = 0; $i < count($products); $i++){
-            $cat_name = $categories[array_search($products[$i]['categoryId'], array_column($categories, 'id'))]['name'];
-            $products[$i]['category'] = $cat_name;
+        for ($i = 0; $i < count($products); $i++) {
+            $catName = $categories[array_search($products[$i]['categoryId'], array_column($categories, 'id'))]['name'];
+            $products[$i]['category'] = $catName;
             unset($products[$i]['categoryId']);
         }
 
